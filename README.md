@@ -2,6 +2,10 @@
 
 To start your Phoenix server:
 
+  * Make `arke_server` dependency to point to your local version of the library by changing in `mix.exs`:
+    ```elixir
+      {:arke_server, path: "/Users/developerarkemis/Workspace/@ark/arke-monorepo-elixir/apps/arke_server"}
+    ```
   * Install dependencies with `mix deps.get`
   * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
