@@ -49,3 +49,25 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :arke,
+       persistence: %{
+         arke_postgres: %{
+           create: &ArkePostgres.create/2,
+           get_all: &ArkePostgres.get_all/3,
+           get_by: &ArkePostgres.get_by/3,
+           update: &ArkePostgres.update/2,
+           delete: &ArkePostgres.delete/2,
+           execute_query: &ArkePostgres.Query.execute/3,
+           get_parameters: &ArkePostgres.Query.get_parameters/0,
+           create_project: &ArkePostgres.create_project/1,
+           delete_project: &ArkePostgres.delete_project/1
+         }
+       }
+
+# Guardian configuration
+config :arke_auth, ArkeAuth.Guardian,
+       issuer: "arke_auth",
+       secret_key: "qby4HTsDDHvf4fzGqlzBWHsUAZ8Pad6b0nI1+/mh7GXdM6XEiYYPRrtuQ3o/ISoF",
+       verify_issuer: true,
+       token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}

@@ -22,3 +22,13 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 phoenix_starter-*.tar
 
+# ENV
+.env
+.env.*
+
+# Jetbrains
+.idea/
+.idea/*
+*.iml
+
+

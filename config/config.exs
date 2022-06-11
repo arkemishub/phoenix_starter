@@ -7,6 +7,12 @@
 # General application configuration
 import Config
 
+config :arke_postgres, ArkePostgres.Repo,
+       database: System.get_env("DB_NAME"),
+       hostname: System.get_env("DB_HOSTNAME"),
+       username: System.get_env("DB_USER"),
+       password: System.get_env("DB_PASSWORD")
+
 # Configures the endpoint
 config :phoenix_starter, PhoenixStarterWeb.Endpoint,
   url: [host: "localhost"],
@@ -18,6 +24,8 @@ config :phoenix_starter, PhoenixStarterWeb.Endpoint,
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
+
+config :arke_postgres, ecto_repos: [ArkePostgres.Repo]
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

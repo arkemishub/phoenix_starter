@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="typed_struct" type="mix">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/typed_struct/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/typed_struct/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/typed_struct/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/typed_struct/ebin" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/deps/typed_struct/lib" />
+      <root url="file://$PROJECT_DIR$/deps/typed_struct/lib" />
+    </SOURCES>
+  </library>
+</component>

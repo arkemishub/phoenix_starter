@@ -38,7 +38,10 @@ defmodule PhoenixStarter.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:arke_server, path: "/Users/developerarkemis/Workspace/@ark/arke-monorepo-elixir/apps/arke_server"},
+      {:arke, path: "/Users/dorianmercatante/Workspace/arkemis/arke-monorepo-elixir/apps/arke"},
+      {:arke_postgres, path: "/Users/dorianmercatante/Workspace/arkemis/arke-monorepo-elixir/apps/arke_postgres"},
+      {:arke_auth, path: "/Users/dorianmercatante/Workspace/arkemis/arke-monorepo-elixir/apps/arke_auth"},
+      {:arke_server, path: "/Users/dorianmercatante/Workspace/arkemis/arke-monorepo-elixir/apps/arke_server"},
     ]
   end
 
