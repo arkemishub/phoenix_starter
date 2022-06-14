@@ -13,6 +13,17 @@ export ELIXIR_ARKE_MONOREPO=/Users/<YOUR_USER>/Workspace/Arke/arke-monorepo-elix
    {:arke_server, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}"}
 ```
 * Install dependencies with `mix deps.get`
+
+* Add a `.env` file in the root of the project to set the DB env variables:
+```
+export DB_NAME=
+export DB_HOSTNAME=
+export DB_USER=
+export DB_PASSWORD=
+```
+
+* Run `source .env`
+
 * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
