@@ -5,7 +5,7 @@ To start your Phoenix server:
 * Add on your `.zshenv` file the path of the `arke-monorepo`:
 
 ```bash
-export ELIXIR_ARKE_MONOREPO=/Users/<YOUR_USER>/Workspace/Arke/arke-monorepo-elixir/
+export ARKE_MONOREPO_ELIXIR_PATH=/Users/<YOUR_USER>/Workspace/Arke/arke-monorepo-elixir/
 ```
 
 * In this way `arke_server` dependency points to your local version of the library:
