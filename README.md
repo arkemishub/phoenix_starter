@@ -2,12 +2,29 @@
 
 To start your Phoenix server:
 
-  * Make `arke_server` dependency to point to your local version of the library by changing in `mix.exs`:
-    ```elixir
-      {:arke_server, path: "/Users/developerarkemis/Workspace/@ark/arke-monorepo-elixir/apps/arke_server"}
-    ```
-  * Install dependencies with `mix deps.get`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+* Add on your `.zshenv` file the path of the `arke-monorepo`:
+
+```bash
+export ELIXIR_ARKE_MONOREPO=/Users/<YOUR_USER>/Workspace/Arke/arke-monorepo-elixir/
+```
+
+* In this way `arke_server` dependency points to your local version of the library:
+```elixir
+   {:arke_server, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}"}
+```
+* Install dependencies with `mix deps.get`
+
+* Add a `.env` file in the root of the project to set the DB env variables:
+```
+export DB_NAME=
+export DB_HOSTNAME=
+export DB_USER=
+export DB_PASSWORD=
+```
+
+* Run `source .env`
+
+* Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
