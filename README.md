@@ -1,8 +1,10 @@
 # PhoenixStarter
 
+Require [arke-monorepo-elixir](https://github.com/arkemishub/arke-monorepo-elixir)
+
 To start your Phoenix server:
 
-* Add on your `.zshenv` file the path of the `arke-monorepo`:
+* Add on your `.zshenv` file the path of the `arke-monorepo-elixir`:
 
 ```bash
 export ARKE_MONOREPO_ELIXIR_PATH=/Users/<YOUR_USER>/Workspace/Arke/arke-monorepo-elixir/
