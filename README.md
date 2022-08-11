@@ -28,6 +28,8 @@ export DB_PASSWORD=
 
 * Start Phoenix endpoint inside IEx with `iex -S mix phx.server`
 
+* If it is necessary clean old deps with `mix deps.clean --all`
+
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
