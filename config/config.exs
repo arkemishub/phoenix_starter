@@ -13,6 +13,19 @@ config :arke_postgres, ArkePostgres.Repo,
        username: System.get_env("DB_USER"),
        password: System.get_env("DB_PASSWORD")
 
+config :arke,
+       persistence: %{
+         arke_postgres: %{
+           init: &ArkePostgres.init/0,
+           create: &ArkePostgres.create/2,
+           update: &ArkePostgres.update/2,
+           delete: &ArkePostgres.delete/2,
+           execute_query: &ArkePostgres.Query.execute/2,
+           create_project: &ArkePostgres.create_project/1,
+           delete_project: &ArkePostgres.delete_project/1
+         }
+       }
+
 # Configures the endpoint
 config :phoenix_starter, PhoenixStarterWeb.Endpoint,
   url: [host: "localhost"],

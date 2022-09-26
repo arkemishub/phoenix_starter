@@ -53,13 +53,11 @@ config :phoenix, :plug_init_mode, :runtime
 config :arke,
        persistence: %{
          arke_postgres: %{
+           init: &ArkePostgres.init/0,
            create: &ArkePostgres.create/2,
-           get_all: &ArkePostgres.get_all/3,
-           get_by: &ArkePostgres.get_by/3,
            update: &ArkePostgres.update/2,
            delete: &ArkePostgres.delete/2,
-           execute_query: &ArkePostgres.Query.execute/3,
-           get_parameters: &ArkePostgres.Query.get_parameters/0,
+           execute_query: &ArkePostgres.Query.execute/2,
            create_project: &ArkePostgres.create_project/1,
            delete_project: &ArkePostgres.delete_project/1
          }
