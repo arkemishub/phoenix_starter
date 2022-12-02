@@ -4,31 +4,37 @@ Require [arke-monorepo-elixir](https://github.com/arkemishub/arke-monorepo-elixi
 
 To start your Phoenix server:
 
-* Add on your `.zshenv` file the path of the `arke-monorepo-elixir`:
+- Add on your `.zshenv` file the path of the `arke-monorepo-elixir`:
 
 ```bash
 export ARKE_MONOREPO_ELIXIR_PATH=/Users/<YOUR_USER>/Workspace/Arke/arke-monorepo-elixir/
 ```
 
-* In this way `arke_server` dependency points to your local version of the library:
+- In this way `arke_server` dependency points to your local version of the library:
+
 ```elixir
    {:arke_server, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}"}
 ```
-* Install dependencies with `mix deps.get`
 
-* Add a `.env` file in the root of the project to set the DB env variables:
+- Install dependencies with `mix deps.get`
+
+- Add a `.env` file in the root of the project to set the DB env variables:
+
 ```
 export DB_NAME=
 export DB_HOSTNAME=
 export DB_USER=
 export DB_PASSWORD=
+export ARKE_MONOREPO_ELIXIR_PATH=
+export SECRET_KEY_BASE=
+export SECRET_KEY_AUTH
 ```
 
-* Run `source .env`
+- Run `source .env`
 
-* Start Phoenix endpoint inside IEx with `iex -S mix phx.server`
+- Start Phoenix endpoint inside IEx with `iex -S mix phx.server`
 
-* If it is necessary clean old deps with `mix deps.clean --all`
+- If it is necessary clean old deps with `mix deps.clean --all`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
@@ -36,8 +42,8 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 
 ## Learn more
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+- Official website: https://www.phoenixframework.org/
+- Guides: https://hexdocs.pm/phoenix/overview.html
+- Docs: https://hexdocs.pm/phoenix
+- Forum: https://elixirforum.com/c/phoenix-forum
+- Source: https://github.com/phoenixframework/phoenix

@@ -31,10 +31,16 @@ defmodule PhoenixStarter.MixProject do
   # Logs info regarding Arke deps
   require Logger
 
-  if System.get_env("ARKE_MONOREPO_ELIXIR_PATH") do
-    Logger.info("Arke deps PATH: #{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}")
-  else
-    Logger.alert("Arke deps FAILED: Set ARKE_MONOREPO_ELIXIR_PATH on your .zshenv")
+  case Mix.env() == :dev do
+    true ->
+      if System.get_env("ARKE_MONOREPO_ELIXIR_PATH") do
+        Logger.info("Arke deps PATH: #{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}")
+      else
+        Logger.alert("Arke deps FAILED: Set ARKE_MONOREPO_ELIXIR_PATH on your .zshenv")
+      end
+
+    _ ->
+      nil
   end
 
   # Specifies your project dependencies.
@@ -52,21 +58,21 @@ defmodule PhoenixStarter.MixProject do
     ])
   end
 
-  defp get_arke_deps(_env) do
-    [
-      {:arke, "~> 0.1.1"},
-      {:arke_postgres, "~> 0.1.0"},
-      {:arke_auth, "~> 0.1.0"},
-      {:arke_server, "~> 0.1.0"}
-    ]
-  end
-
   defp get_arke_deps(:dev) do
     [
       {:arke, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke"},
       {:arke_postgres, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_postgres"},
       {:arke_auth, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_auth"},
       {:arke_server, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_server"}
+    ]
+  end
+
+  defp get_arke_deps(_env) do
+    [
+      {:arke, "~> 0.1.1"},
+      {:arke_postgres, "~> 0.1.0"},
+      {:arke_auth, "~> 0.1.0"},
+      {:arke_server, "~> 0.1.0"}
     ]
   end
 

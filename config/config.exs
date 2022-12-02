@@ -7,24 +7,31 @@
 # General application configuration
 import Config
 
-config :arke_postgres, ArkePostgres.Repo,
-       database: System.get_env("DB_NAME"),
-       hostname: System.get_env("DB_HOSTNAME"),
-       username: System.get_env("DB_USER"),
-       password: System.get_env("DB_PASSWORD")
+secret_key_auth =
+  System.get_env("SECRET_KEY_AUTH") ||
+    raise """
+    environment variable SECRET_KEY_AUTH is missing.
+    You can generate one by calling: mix guardian.gen.secret
+    """
+
+config :arke_auth, ArkeAuth.Guardian,
+  issuer: "arke_auth",
+  secret_key: secret_key_auth,
+  verify_issuer: true,
+  token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
 
 config :arke,
-       persistence: %{
-         arke_postgres: %{
-           init: &ArkePostgres.init/0,
-           create: &ArkePostgres.create/2,
-           update: &ArkePostgres.update/2,
-           delete: &ArkePostgres.delete/2,
-           execute_query: &ArkePostgres.Query.execute/2,
-           create_project: &ArkePostgres.create_project/1,
-           delete_project: &ArkePostgres.delete_project/1
-         }
-       }
+  persistence: %{
+    arke_postgres: %{
+      init: &ArkePostgres.init/0,
+      create: &ArkePostgres.create/2,
+      update: &ArkePostgres.update/2,
+      delete: &ArkePostgres.delete/2,
+      execute_query: &ArkePostgres.Query.execute/2,
+      create_project: &ArkePostgres.create_project/1,
+      delete_project: &ArkePostgres.delete_project/1
+    }
+  }
 
 # Configures the endpoint
 config :phoenix_starter, PhoenixStarterWeb.Endpoint,

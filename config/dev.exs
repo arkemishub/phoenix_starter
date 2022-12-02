@@ -6,6 +6,14 @@ import Config
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with esbuild to bundle .js and .css sources.
+a
+secret_key =
+  System.get_env("SECRET_KEY_BASE") ||
+    raise """
+    environment variable SECRET_KEY_BASE is missing.
+    You can generate one by calling: mix phx.gen.secret
+    """
+
 config :phoenix_starter, PhoenixStarterWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
@@ -13,7 +21,7 @@ config :phoenix_starter, PhoenixStarterWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "pJsr+GA5YCBRF6F4h+CwPET/HDtMm8x7PZ0qQ1uEqjInnCSScFyHF12rroZb6kih",
+  secret_key_base: secret_key,
   watchers: []
 
 # ## SSL Support
@@ -49,23 +57,3 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
-
-config :arke,
-       persistence: %{
-         arke_postgres: %{
-           init: &ArkePostgres.init/0,
-           create: &ArkePostgres.create/2,
-           update: &ArkePostgres.update/2,
-           delete: &ArkePostgres.delete/2,
-           execute_query: &ArkePostgres.Query.execute/2,
-           create_project: &ArkePostgres.create_project/1,
-           delete_project: &ArkePostgres.delete_project/1
-         }
-       }
-
-# Guardian configuration
-config :arke_auth, ArkeAuth.Guardian,
-       issuer: "arke_auth",
-       secret_key: "qby4HTsDDHvf4fzGqlzBWHsUAZ8Pad6b0nI1+/mh7GXdM6XEiYYPRrtuQ3o/ISoF",
-       verify_issuer: true,
-       token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
