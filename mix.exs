@@ -31,17 +31,17 @@ defmodule PhoenixStarter.MixProject do
   # Logs info regarding Arke deps
   require Logger
 
-  case Mix.env() == :dev do
-    true ->
-      if System.get_env("ARKE_MONOREPO_ELIXIR_PATH") do
-        Logger.info("Arke deps PATH: #{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}")
-      else
-        Logger.alert("Arke deps FAILED: Set ARKE_MONOREPO_ELIXIR_PATH on your .zshenv")
-      end
+  # case Mix.env() == :dev do
+  #   true ->
+  #     if System.get_env("ARKE_MONOREPO_ELIXIR_PATH") do
+  #       Logger.info("Arke deps PATH: #{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}")
+  #     else
+  #       Logger.alert("Arke deps FAILED: Set ARKE_MONOREPO_ELIXIR_PATH on your .zshenv")
+  #     end
 
-    _ ->
-      nil
-  end
+  #   _ ->
+  #     nil
+  # end
 
   # Specifies your project dependencies.
   #

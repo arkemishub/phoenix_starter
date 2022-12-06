@@ -7,19 +7,6 @@
 # General application configuration
 import Config
 
-secret_key_auth =
-  System.get_env("SECRET_KEY_AUTH") ||
-    raise """
-    environment variable SECRET_KEY_AUTH is missing.
-    You can generate one by calling: mix guardian.gen.secret
-    """
-
-config :arke_auth, ArkeAuth.Guardian,
-  issuer: "arke_auth",
-  secret_key: secret_key_auth,
-  verify_issuer: true,
-  token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
-
 config :arke,
   persistence: %{
     arke_postgres: %{
@@ -36,7 +23,11 @@ config :arke,
 # Configures the endpoint
 config :phoenix_starter, PhoenixStarterWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: PhoenixStarterWeb.ErrorView, accepts: ~w(json), layout: false],
+  render_errors: [
+    view: PhoenixStarterWeb.ErrorView,
+    accepts: ~w(json),
+    layout: false
+  ],
   pubsub_server: PhoenixStarter.PubSub,
   live_view: [signing_salt: "ODJKm1AE"]
 
@@ -45,10 +36,12 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-config :arke_postgres, ecto_repos: [ArkePostgres.Repo]
-
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :phoenix_starter, ecto_repos: [ArkePostgres.Repo]
+# TODO: remove after update
+config :arke_postgres, ecto_repos: [ArkePostgres.Repo]
 
 # Add Config for ArkeServer endpoints
 config :arke_server, ArkeServer.Endpoint, server: false

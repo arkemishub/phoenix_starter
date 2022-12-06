@@ -14,9 +14,23 @@ end
 
 config :arke_postgres, ArkePostgres.Repo,
   database: System.get_env("DB_NAME"),
-  hostname: System.get_env("DB_HOSTNAME"),
-  username: System.get_env("DB_USER"),
-  password: System.get_env("DB_PASSWORD")
+  hostname: System.get_env("DB_HOSTNAME", "localhost"),
+  username: System.get_env("DB_USER", "postgres"),
+  password: System.get_env("DB_PASSWORD", "postgres"),
+  port: System.get_env("DB_PORT", "5432")
+
+secret_key_auth =
+  System.get_env("SECRET_KEY_AUTH") ||
+    raise """
+    environment variable SECRET_KEY_AUTH is missing.
+    You can generate one by calling: mix guardian.gen.secret
+    """
+
+config :arke_auth, ArkeAuth.Guardian,
+  issuer: "arke_auth",
+  secret_key: secret_key_auth,
+  verify_issuer: true,
+  token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
 
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.

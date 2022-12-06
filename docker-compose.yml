@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: postgres:latest
+    container_name: arke-phx-postgres
+    restart: on-failure:5
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: $DB_NAME
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - '${DB_PORT}:5432'
+    volumes:
+      - db-phx-data:/var/lib/postgresql/data
+      - ./scripts/postgres/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+  app: 
+    image: arke-phx
+    container_name: arke-phx
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      args:
+        - MIX_ENV=prod
+    restart: on-failure:5
+    env_file:
+      - ./.env
+    environment:
+       - SECRET_KEY_AUTH=$SECRET_KEY_AUTH
+       - SECRET_KEY_BASE=$SECRET_KEY_BASE
+       - MIX_ENV=prod
+       - DB_USER=$DB_USER
+       - DB_PASSWORD=$DB_PASSWORD
+       - DB_NAME=$DB_NAME
+       - DB_HOSTNAME=$DB_HOSTNAME
+       - DB_PORT=${DB_PORT}
+    volumes:
+      - .:/phoenix_starter
+    ports:
+      - '4000:4000'
+    depends_on:
+      - db
+        
+  
+
+volumes:
+  db-phx-data:
+    driver: local

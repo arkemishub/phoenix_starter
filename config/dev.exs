@@ -6,7 +6,6 @@ import Config
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with esbuild to bundle .js and .css sources.
-a
 secret_key =
   System.get_env("SECRET_KEY_BASE") ||
     raise """
@@ -22,7 +21,7 @@ config :phoenix_starter, PhoenixStarterWeb.Endpoint,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: secret_key,
-  watchers: []
+  watchers: [],
 
 # ## SSL Support
 #

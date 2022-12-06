@@ -16,15 +16,17 @@ ARG ELIXIR_VERSION=1.14.0
 ARG OTP_VERSION=25.1
 ARG DEBIAN_VERSION=bullseye-20220801-slim
 
-
 ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
 ARG RUNNER_IMAGE="debian:${DEBIAN_VERSION}"
 
 FROM ${BUILDER_IMAGE} as builder
 
+ARG MIX_ENV
 # install build dependencies
 RUN apt-get update -y && apt-get install -y build-essential git \
     && apt-get clean && rm -f /var/lib/apt/lists/*_*
+
+
 
 # prepare build dir
 WORKDIR /app
@@ -34,16 +36,11 @@ RUN mix local.hex --force && \
     mix local.rebar --force
 
 # set build ENV
-ENV MIX_ENV="prod"
-
-ENV DB_NAME=$DB_NAME
-ENV DB_HOSTNAME=$DB_HOSTNAME
-ENV DB_USER=$DB_USER
-ENV DB_PASSWORD=$DB_PASSWORD
+ENV MIX_ENV=${MIX_ENV}
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
-RUN mix deps.get --only $MIX_ENV
+RUN mix deps.get --only ${MIX_ENV}
 RUN mkdir config
 
 # copy compile-time config files before we compile dependencies
@@ -69,6 +66,7 @@ RUN mix release
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE}
 
+
 RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
     && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
@@ -82,34 +80,18 @@ ENV LC_ALL en_US.UTF-8
 WORKDIR "/app"
 RUN chown nobody /app
 
+ARG MIX_ENV
 # set runner ENV
-ENV MIX_ENV="prod"
+ENV MIX_ENV=${MIX_ENV}
 
 # Only copy the final release from the build stage
 COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/phoenix_starter ./
 
 USER nobody
 
-
-ARG DB_NAME
-ARG DB_HOSTNAME
-ARG DB_USER
-ARG DB_PASSWORD
-ARG SECRET_KEY_BASE
-ARG SECRET_KEY_AUTH
-ARG RELEASE_NAME
-ARG PHX_SERVER
-
-ENV SECRET_KEY_BASE=$SECRET_KEY_BASE
-ENV SECRET_KEY_AUTH=$SECRET_KEY_AUTH
-ENV DB_NAME=$DB_NAME
-ENV DB_HOSTNAME=$DB_HOSTNAME
-ENV DB_USER=$DB_USER
-ENV DB_PASSWORD=$DB_PASSWORD
-ENV RELEASE_NAME=$RELEASE_NAME
-ENV PHX_SERVER=$PHX_SERVER
-ENV MIX_ENV="prod"
+COPY --chown=nobody:root scripts/phoenix/entrypoint.sh ./
+RUN chmod +x ./entrypoint.sh
 
 EXPOSE 4000
 
-CMD ["/app/bin/server"]
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]

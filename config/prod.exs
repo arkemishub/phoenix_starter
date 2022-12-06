@@ -48,7 +48,6 @@ config :logger, level: :info
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
-config :arke_postgres, ecto_repos: [ArkePostgres.Repo]
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
