@@ -4,13 +4,15 @@ defmodule PhoenixStarter.Release do
   installed.
   """
   @app :phoenix_starter
-
   def migrate do
     load_app()
+    IO.puts("***** RUNNING MIGRATIONS *****")
 
     for repo <- repos() do
       {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :up, all: true))
     end
+
+    IO.puts("***** END MIGRATIONS *****")
   end
 
   def rollback(repo, version) do
