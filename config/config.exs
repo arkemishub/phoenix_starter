@@ -46,6 +46,13 @@ config :phoenix, :json_library, Jason
 # Add Config for ArkeServer endpoints
 config :arke_server, ArkeServer.Endpoint, server: false
 
+# Guardian configuration
+config :arke_auth, ArkeAuth.Guardian,
+issuer: "arke_auth",
+secret_key: System.get_env("SECRET_KEY_BASE"),
+verify_issuer: true,
+token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

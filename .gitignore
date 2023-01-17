@@ -25,6 +25,7 @@ phoenix_starter-*.tar
 # ENV
 .env
 .env.*
+*.env
 
 # Jetbrains
 .idea/
@@ -33,5 +34,8 @@ phoenix_starter-*.tar
 .DS_Store
 lib/.DS_Store
 
-
+#Other
+.dockerignore
+.history/
+.vscode/
 
