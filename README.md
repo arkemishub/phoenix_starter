@@ -1,43 +1,100 @@
 # PhoenixStarter
 
-Require [arke-monorepo-elixir](https://github.com/arkemishub/arke-monorepo-elixir)
+<br/>
 
-To start your Phoenix server:
+## Get started
 
-* Add on your `.zshenv` file the path of the `arke-monorepo-elixir`:
+- Add a `.env` file in the root of the project to set the DB env variables:
 
-```bash
-export ARKE_MONOREPO_ELIXIR_PATH=/Users/<YOUR_USER>/Workspace/Arke/arke-monorepo-elixir/
-```
-
-* In this way `arke_server` dependency points to your local version of the library:
-```elixir
-   {:arke_server, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}"}
-```
-* Install dependencies with `mix deps.get`
-
-* Add a `.env` file in the root of the project to set the DB env variables:
-```
+```makefile
 export DB_NAME=
 export DB_HOSTNAME=
 export DB_USER=
 export DB_PASSWORD=
 ```
 
-* Run `source .env`
+<br/>
 
-* Start Phoenix endpoint inside IEx with `iex -S mix phx.server`
+- Run `source .env`
 
-* If it is necessary clean old deps with `mix deps.clean --all`
+```bash
+source .env
+```
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+<br/>
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Start the server :
+
+- Install dependencies:
+
+```bash
+mix deps.get
+```
+
+- Create the database and populate it:
+
+```bash
+mix arke_postgres.create_and_seed
+```
+the seed contain a default user :
+- username : `default_user`
+- pwd : `ArkemisPassword1`
+
+<br/>
+- Start Phoenix endpoint inside IEx:
+
+```bash
+iex -S mix phx.server
+```
+
+- If it is necessary clean old deps (`local developement`):
+
+```bash
+mix deps.clean --all
+```
+
+### Enjoy your app on [`localhost:4000`](http://localhost:4000)
+
+<br/>
+
+## How to contribute to arke developement
+
+If you are glad to support us and contribute to the developement of Arke:
+
+ <br/>
+
+- clone the repo [arke-monorepo-elixir](https://github.com/arkemishub/arke-monorepo-elixir)
+
+```bash
+git clone git@github.com:arkemishub/arke-monorepo-elixir.git
+```
+
+- Pull the submodules
+```bash
+git pull --recurse-submodules
+git submodule update --init
+```
+<br/>
+
+- Add to your `.env` file the path of the cloned repo:
+
+```bash
+export ARKE_MONOREPO_ELIXIR_PATH= 'PATH_TO_ARKE_MONOREPO'
+```
+
+<br/>
+
+- Run the [commands](#start-the-server) in the linked section. If you have previously installed the dependencies use the `clean` commands before install the deps again. (Use the `clean` also if you do not see your changes locally)
+
+<br/>
+
+By adding the `ARKE_MONOREPO_ELIXIR_PATH` variable you are able to use the arke's packages cloned locally.
+
 
 ## Learn more
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+- Official website: https://www.phoenixframework.org/
+- Guides: https://hexdocs.pm/phoenix/overview.html
+- Docs: https://hexdocs.pm/phoenix
+- Forum: https://elixirforum.com/c/phoenix-forum
+- Source: https://github.com/phoenixframework/phoenix
