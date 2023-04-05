@@ -33,7 +33,8 @@ mix deps.get
 
 - Create the database and populate it:
 
- ##### N.B the env variables [above](#get-started) should be valorized
+##### N.B the env variables [above](#get-started) should be valorized
+
  <br/>
 
 ```bash
@@ -41,9 +42,11 @@ mix ecto.create -r ArkePostgres.Repo
 mix ecto.migrate -r ArkePostgres.Repo
 mix arke_postgres.init_db
 ```
+
 the seed contain a default user :
-- username : `default_user`
-- pwd : `ArkemisPassword1`
+
+- username : `admin`
+- pwd : `admin`
 
 <br/>
 - Start Phoenix endpoint inside IEx:
@@ -75,10 +78,12 @@ git clone git@github.com:arkemishub/arke-monorepo-elixir.git
 ```
 
 - Pull the submodules
+
 ```bash
 git pull --recurse-submodules
 git submodule update --init
 ```
+
 <br/>
 
 - Add to your `.env` file the path of the cloned repo:
@@ -94,7 +99,6 @@ export ARKE_MONOREPO_ELIXIR_PATH= 'PATH_TO_ARKE_MONOREPO'
 <br/>
 
 By adding the `ARKE_MONOREPO_ELIXIR_PATH` variable you are able to use the arke's packages cloned locally.
-
 
 ## Learn more
 
