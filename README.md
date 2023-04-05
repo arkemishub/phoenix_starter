@@ -33,8 +33,13 @@ mix deps.get
 
 - Create the database and populate it:
 
+ ##### N.B the env variables [above](#get-started) should be valorized
+ <br/>
+
 ```bash
-mix arke_postgres.create_and_seed
+mix ecto.create -r ArkePostgres.Repo
+mix ecto.migrate -r ArkePostgres.Repo
+mix arke_postgres.init_db
 ```
 the seed contain a default user :
 - username : `default_user`
