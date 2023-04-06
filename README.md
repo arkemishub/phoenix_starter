@@ -39,7 +39,6 @@ mix deps.get
 
 ```bash
 mix ecto.create -r ArkePostgres.Repo
-mix ecto.migrate -r ArkePostgres.Repo
 mix arke_postgres.init_db
 ```
 
