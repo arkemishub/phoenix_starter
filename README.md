@@ -40,6 +40,7 @@ mix deps.get
 ```bash
 mix ecto.create -r ArkePostgres.Repo
 mix arke_postgres.init_db
+mix ecto.migrate -r ArkePostgres.Repo
 ```
 
 the seed contain a default user :
