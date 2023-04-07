@@ -18,7 +18,6 @@ export DB_USER=
 export DB_PASSWORD=
 ```
 
-<br/>
 
 - Run `source .env`
 
