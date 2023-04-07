@@ -1,5 +1,10 @@
 # PhoenixStarter
 
+## Requirements
+
+- [Elixir](https://elixir-lang.org/install.html) (`~> 1.13`)
+- [Postgres](https://www.postgresql.org/docs/14/tutorial-install.html) (`~> 14.5`)
+
 <br/>
 
 ## Get started
@@ -33,9 +38,7 @@ mix deps.get
 
 - Create the database and populate it:
 
-##### N.B the env variables [above](#get-started) should be valorized
-
- <br/>
+##### N.B the env variables [above](#get-started) should be valorized. If you have done it now re-run the `source .env` command
 
 ```bash
 mix ecto.create -r ArkePostgres.Repo
@@ -43,25 +46,26 @@ mix arke_postgres.init_db
 mix ecto.migrate -r ArkePostgres.Repo
 ```
 
-the seed contain a default user :
+- Use the credentials below to access the app:
+```
+username = admin
+pwd = admin
+```
 
-- username : `admin`
-- pwd : `admin`
 
-<br/>
 - Start Phoenix endpoint inside IEx:
 
 ```bash
 iex -S mix phx.server
 ```
 
-- If it is necessary clean old deps (`local developement`):
+- If it is necessary clean old deps (`for local developement`):
 
 ```bash
 mix deps.clean --all
 ```
 
-### Enjoy your app on [`localhost:4000`](http://localhost:4000)
+- Enjoy your app on [`localhost:4000`](http://localhost:4000)
 
 <br/>
 
@@ -99,6 +103,8 @@ export ARKE_MONOREPO_ELIXIR_PATH= 'PATH_TO_ARKE_MONOREPO'
 <br/>
 
 By adding the `ARKE_MONOREPO_ELIXIR_PATH` variable you are able to use the arke's packages cloned locally.
+
+<br/>
 
 ## Learn more
 
