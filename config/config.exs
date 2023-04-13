@@ -45,6 +45,8 @@ config :phoenix, :json_library, Jason
 
 # Add Config for ArkeServer endpoints
 config :arke_server, ArkeServer.Endpoint, server: false
+
+# The endpoint module define which servers show in the swagger. You can pass a single one or a list
 config :arke_server, endpoint_module: PhoenixStarterWeb.Endpoint
 
 # Guardian configuration
