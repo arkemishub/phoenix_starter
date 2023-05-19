@@ -18,7 +18,6 @@ export DB_USER=
 export DB_PASSWORD=
 ```
 
-
 - Run `source .env`
 
 ```bash
@@ -46,11 +45,11 @@ mix ecto.migrate -r ArkePostgres.Repo
 ```
 
 - Use the credentials below to access the app:
+
 ```
 username = admin
 pwd = admin
 ```
-
 
 - Start Phoenix endpoint inside IEx:
 
@@ -101,7 +100,7 @@ export ARKE_MONOREPO_ELIXIR_PATH= 'PATH_TO_ARKE_MONOREPO'
 
 <br/>
 
-By adding the `ARKE_MONOREPO_ELIXIR_PATH` variable you are able to use the arke's packages cloned locally.
+By adding the `ARKE_MONOREPO_ELIXIR_PATH` variable you are able to use the arke's packages cloned locally. They must be in the same directory
 
 <br/>
 
