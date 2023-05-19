@@ -46,8 +46,7 @@ defmodule PhoenixStarter.MixProject do
     mono_path = System.get_env("ARKE_MONOREPO_ELIXIR_PATH", nil)
     current_cmd = List.first(System.argv())
 
-    with true <- (mono_path != nil and mono_path != "") do
-
+    with true <- mono_path != nil and mono_path != "" do
       if String.contains?(current_cmd, "deps.get") do
         IO.puts(
           "#{IO.ANSI.cyan()}ARKE_MONOREPO_ELIXIR_PATH found. Using local dependencies#{IO.ANSI.reset()}"
@@ -74,10 +73,10 @@ defmodule PhoenixStarter.MixProject do
 
   defp arke_deps(_) do
     [
-      {:arke, "~> 0.1.2"},
-      {:arke_postgres, "~> 0.1.2"},
-      {:arke_auth, "~> 0.1.1"},
-      {:arke_server, "~> 0.1.1"}
+      {:arke, "~> 0.1.4"},
+      {:arke_postgres, "~> 0.1.4"},
+      {:arke_auth, "~> 0.1.3"},
+      {:arke_server, "~> 0.1.3"}
     ]
   end
 
