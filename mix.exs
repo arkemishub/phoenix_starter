@@ -5,7 +5,7 @@ defmodule PhoenixStarter.MixProject do
     [
       app: :phoenix_starter,
       version: "0.1.0",
-      elixir: "~> 1.12",
+      elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -28,19 +28,6 @@ defmodule PhoenixStarter.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
-  # Logs info regarding Arke deps
-  require Logger
-
-  Logger.info(System.get_env("MIX_ENV"))
-
-  if System.get_env("ARKE_MONOREPO_ELIXIR_PATH") do
-    Logger.info("Arke deps PATH: #{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}")
-  else
-    Logger.alert("Arke deps FAILED: Set ARKE_MONOREPO_ELIXIR_PATH on your .zshenv")
-  end
-
-  # Specifies your project dependencies.
-  #
   # Type `mix help deps` for examples and options.
   defp deps do
     List.flatten([
@@ -51,32 +38,38 @@ defmodule PhoenixStarter.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       arke_deps(Mix.env())
-
-      # lib_arke(Mix.env()),
-      # lib_postgres(Mix.env()),
-      # lib_auth(Mix.env()),
-      # lib_server(Mix.env())
-      # {:arke, "~> 0.1.2", override: [:prod, :test], runtime: false},
-      # {:arke_postgres, "~> 0.1.0", override: [:prod, :test], runtime: false},
-      # {:arke_auth, "~> 0.1.0", override: [:prod, :test], runtime: false},
-      # {:arke_server, "~> 0.1.0", override: [:prod, :test], runtime: false},
-      # {:arke, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke", override: :dev, runtime: false},
-      # {:arke_postgres, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_postgres", override: :dev, runtime: false},
-      # {:arke_auth, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_auth", override: :dev, runtime: false},
-      # {:arke_server, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_server", override: :dev, runtime: false}
     ])
   end
 
   defp arke_deps(:dev) do
-    [
-      {:arke, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke", override: true},
-      {:arke_postgres,
-       path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_postgres", override: true},
-      {:arke_auth,
-       path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_auth", override: true},
-      {:arke_server,
-       path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_server", override: true}
-    ]
+    # Get arke's dependecies based on the env path. Also print a message only if the current command is mix deps.get
+    mono_path = System.get_env("ARKE_MONOREPO_ELIXIR_PATH", nil)
+    current_cmd = List.first(System.argv())
+
+    with true <- (mono_path != nil and mono_path != "") do
+
+      if String.contains?(current_cmd, "deps.get") do
+        IO.puts(
+          "#{IO.ANSI.cyan()}ARKE_MONOREPO_ELIXIR_PATH found. Using local dependencies#{IO.ANSI.reset()}"
+        )
+      end
+
+      [
+        {:arke, path: "#{mono_path}/arke", override: true},
+        {:arke_postgres, path: "#{mono_path}/arke_postgres", override: true},
+        {:arke_auth, path: "#{mono_path}/arke_auth", override: true},
+        {:arke_server, path: "#{mono_path}/arke_server", override: true}
+      ]
+    else
+      _ ->
+        if String.contains?(current_cmd, "deps.get") do
+          IO.puts(
+            "#{IO.ANSI.cyan()}ARKE_MONOREPO_ELIXIR_PATH not found. Using published dependencies#{IO.ANSI.reset()}"
+          )
+        end
+
+        arke_deps(nil)
+    end
   end
 
   defp arke_deps(_) do
@@ -87,27 +80,6 @@ defmodule PhoenixStarter.MixProject do
       {:arke_server, "~> 0.1.1"}
     ]
   end
-
-  # defp lib_arke(:dev),
-  #   do: {:arke, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke"}
-
-  # defp lib_arke(_), do: {:arke, "~> 0.1.1"}
-
-  # defp lib_postgres(:dev),
-  #   do:
-  #     {:arke_postgres, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_postgres"}
-
-  # defp lib_postgres(_), do: {:arke_postgres, "~> 0.1.0"}
-
-  # defp lib_auth(:dev),
-  #   do: {:arke_auth, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_auth"}
-
-  # defp lib_auth(_), do: {:arke_auth, "~> 0.1.0"}
-
-  # defp lib_server(:dev),
-  #   do: {:arke_server, path: "#{System.get_env("ARKE_MONOREPO_ELIXIR_PATH")}/apps/arke_server"}
-
-  # defp lib_server(_), do: {:arke_server, "~> 0.1.0"}
 
   # Aliases are shortcuts or tasks specific to the current project.
   # For example, to install project dependencies and perform other setup tasks, run:
