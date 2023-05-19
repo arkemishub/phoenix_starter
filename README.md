@@ -1,5 +1,10 @@
 # PhoenixStarter
 
+## Requirements
+
+- [Elixir](https://elixir-lang.org/install.html) (`~> 1.13`)
+- [Postgres](https://www.postgresql.org/docs/14/tutorial-install.html) (`~> 14.5`)
+
 <br/>
 
 ## Get started
@@ -12,8 +17,6 @@ export DB_HOSTNAME=
 export DB_USER=
 export DB_PASSWORD=
 ```
-
-<br/>
 
 - Run `source .env`
 
@@ -33,27 +36,34 @@ mix deps.get
 
 - Create the database and populate it:
 
-```bash
-mix arke_postgres.create_and_seed
-```
-the seed contain a default user :
-- username : `default_user`
-- pwd : `ArkemisPassword1`
+##### N.B the env variables [above](#get-started) should be valorized. If you have done it now re-run the `source .env` command
 
-<br/>
+```bash
+mix ecto.create -r ArkePostgres.Repo
+mix arke_postgres.init_db
+mix ecto.migrate -r ArkePostgres.Repo
+```
+
+- Use the credentials below to access the app:
+
+```
+username = admin
+pwd = admin
+```
+
 - Start Phoenix endpoint inside IEx:
 
 ```bash
 iex -S mix phx.server
 ```
 
-- If it is necessary clean old deps (`local developement`):
+- If it is necessary clean old deps (`for local developement`):
 
 ```bash
 mix deps.clean --all
 ```
 
-### Enjoy your app on [`localhost:4000`](http://localhost:4000)
+- Enjoy your app on [`localhost:4000`](http://localhost:4000)
 
 <br/>
 
@@ -70,10 +80,12 @@ git clone git@github.com:arkemishub/arke-monorepo-elixir.git
 ```
 
 - Pull the submodules
+
 ```bash
 git pull --recurse-submodules
 git submodule update --init
 ```
+
 <br/>
 
 - Add to your `.env` file the path of the cloned repo:
@@ -88,8 +100,9 @@ export ARKE_MONOREPO_ELIXIR_PATH= 'PATH_TO_ARKE_MONOREPO'
 
 <br/>
 
-By adding the `ARKE_MONOREPO_ELIXIR_PATH` variable you are able to use the arke's packages cloned locally.
+By adding the `ARKE_MONOREPO_ELIXIR_PATH` variable you are able to use the arke's packages cloned locally. They must be in the same directory
 
+<br/>
 
 ## Learn more
 
