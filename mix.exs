@@ -46,28 +46,32 @@ defmodule PhoenixStarter.MixProject do
     mono_path = System.get_env("ARKE_MONOREPO_ELIXIR_PATH", nil)
     current_cmd = List.first(System.argv())
 
-    with true <- mono_path != nil and mono_path != "" do
-      if String.contains?(current_cmd, "deps.get") do
-        IO.puts(
-          "#{IO.ANSI.cyan()}ARKE_MONOREPO_ELIXIR_PATH found. Using local dependencies#{IO.ANSI.reset()}"
-        )
-      end
-
-      [
-        {:arke, path: "#{mono_path}/arke", override: true},
-        {:arke_postgres, path: "#{mono_path}/arke_postgres", override: true},
-        {:arke_auth, path: "#{mono_path}/arke_auth", override: true},
-        {:arke_server, path: "#{mono_path}/arke_server", override: true}
-      ]
+    if is_nil(current_cmd) do
+      arke_deps(nil)
     else
-      _ ->
+      with true <- mono_path != nil and mono_path != "" do
         if String.contains?(current_cmd, "deps.get") do
           IO.puts(
-            "#{IO.ANSI.cyan()}ARKE_MONOREPO_ELIXIR_PATH not found. Using published dependencies#{IO.ANSI.reset()}"
+            "#{IO.ANSI.cyan()}ARKE_MONOREPO_ELIXIR_PATH found. Using local dependencies#{IO.ANSI.reset()}"
           )
         end
 
-        arke_deps(nil)
+        [
+          {:arke, path: "#{mono_path}/arke", override: true},
+          {:arke_postgres, path: "#{mono_path}/arke_postgres", override: true},
+          {:arke_auth, path: "#{mono_path}/arke_auth", override: true},
+          {:arke_server, path: "#{mono_path}/arke_server", override: true}
+        ]
+      else
+        _ ->
+          if String.contains?(current_cmd, "deps.get") do
+            IO.puts(
+              "#{IO.ANSI.cyan()}ARKE_MONOREPO_ELIXIR_PATH not found. Using published dependencies#{IO.ANSI.reset()}"
+            )
+          end
+
+          arke_deps(nil)
+      end
     end
   end
 
