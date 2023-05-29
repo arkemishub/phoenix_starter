@@ -1,9 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
 # Docker entrypoint script.
 
 echo $PGPASSWORD
 echo $DB_HOSTNAME
+
 
 # Wait until Postgres is ready.
 while ! pg_isready -h $DB_HOSTNAME -p $DB_PORT -U $DB_USER
@@ -18,6 +19,8 @@ if [[ -z `psql -h $DB_HOSTNAME -p $DB_PORT -U $DB_USER -Atqc "\\list $DB_NAME"` 
     createdb -h $DB_HOSTNAME -p $DB_PORT -U $DB_USER -E UTF8 $DB_NAME -l en_US.UTF-8 -T template0
     echo "Database $DB_NAME created."
 fi
+
+
 
 SCHEMA_EXISTS=$(psql -h $DB_HOSTNAME -p $DB_PORT -U $DB_USER -t -c "SELECT EXISTS (SELECT 1 FROM information_schema.schemata WHERE schema_name = 'arke_system');")
 if [ $SCHEMA_EXISTS = "f" ]; then
