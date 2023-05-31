@@ -8,23 +8,16 @@ RUN apk update && \
 # Create app directory and copy the Elixir projects into it.
 RUN mkdir /app
 COPY . /app
-COPY entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
-
 WORKDIR /app
 
 # Install Hex package manager.
 RUN mix local.hex --force
 RUN mix local.rebar --force
 
-
-
 # Compile the project.
-RUN mix local.hex --force && \
-    mix local.rebar --force && \
-    mix deps.get && mix deps.compile && mix do compile
+RUN mix deps.get && mix deps.compile && mix do compile
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["/app/entrypoint.sh"]
 
 # Find eligible builder and runner images on Docker Hub. We use Ubuntu/Debian instead of
 # Alpine to avoid DNS resolution issues in production.
