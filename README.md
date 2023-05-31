@@ -60,7 +60,7 @@ iex -S mix phx.server
 - If it is necessary clean old deps (`for local developement`):
 
 ```bash
-mix deps.clean --all
+mix deps.update --all
 ```
 
 - Enjoy your app on [`localhost:4000`](http://localhost:4000)
