@@ -43,15 +43,6 @@ defmodule PhoenixStarter.MixProject do
 
   defp arke_deps(:prod), do: arke_package()
 
-  defp arke_package() do
-    [
-      {:arke, "~> 0.1.4"},
-      {:arke_postgres, "~> 0.1.4"},
-      {:arke_auth, "~> 0.1.3"},
-      {:arke_server, "~> 0.1.3"}
-    ]
-  end
-
   defp arke_deps(_) do
     # Get arke's dependecies based on the env path. Also print a message only if the current command is mix deps.get
     env_var = System.get_env()
@@ -59,7 +50,6 @@ defmodule PhoenixStarter.MixProject do
     arke_env =
       Enum.filter(env_var, fn {k, _v} -> String.contains?(String.downcase(k), "arke") end)
 
-    current_cmd = List.first(System.argv())
 
     local_deps =
       Enum.reduce(arke_env, [], fn {package_name, local_path}, acc ->
@@ -78,6 +68,15 @@ defmodule PhoenixStarter.MixProject do
       Enum.filter(deps, fn {k, _v} -> not Enum.member?(Keyword.keys(local_deps), k) end)
 
     filtered_deps ++ local_deps
+  end
+
+  defp arke_package() do
+    [
+      {:arke, "~> 0.1.4"},
+      {:arke_postgres, "~> 0.1.4"},
+      {:arke_auth, "~> 0.1.3"},
+      {:arke_server, "~> 0.1.3"}
+    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
