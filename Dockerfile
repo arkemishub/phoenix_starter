@@ -1,9 +1,9 @@
 # Use an official Elixir runtime as a parent image.
-FROM elixir:1.13.3
+FROM elixir:1.13.3-alpine
 ENV MIX_ENV=prod
 
-RUN apt-get update && \
-    apt-get install -y postgresql-client
+RUN apk update && \
+    apk add postgresql-client build-base
 
 # Create app directory and copy the Elixir projects into it.
 RUN mkdir /app
@@ -15,9 +15,7 @@ RUN mix local.hex --force
 RUN mix local.rebar --force
 
 # Compile the project.
-RUN mix local.hex --force && \
-    mix local.rebar --force && \
-    mix deps.get && mix deps.compile && mix do compile
+RUN mix deps.get && mix deps.compile && mix do compile
 
 CMD ["/app/entrypoint.sh"]
 
