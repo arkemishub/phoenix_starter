@@ -36,7 +36,6 @@ phoenix_starter-*.tar
 lib/.DS_Store
 
 #Other
-.dockerignore
 .history/
 .vscode/
 
