@@ -50,16 +50,15 @@ defmodule PhoenixStarter.MixProject do
     arke_env =
       Enum.filter(env_var, fn {k, _v} -> String.contains?(String.downcase(k), "arke") end)
 
-
     local_deps =
       Enum.reduce(arke_env, [], fn {package_name, local_path}, acc ->
         if local_path !== "" do
           parsed_name = String.replace(package_name, "_ELIXIR_PATH", "") |> String.downcase()
           IO.puts("#{IO.ANSI.cyan()} Using local #{parsed_name}#{IO.ANSI.reset()}")
-          [{String.to_atom(parsed_name), path: local_path, override: true} | acc]
+          [{String.to_atom(parsed_name), path: local_path} | acc]
+        else
+          acc
         end
-
-        acc
       end)
 
     deps = arke_package()
