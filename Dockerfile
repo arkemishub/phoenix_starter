@@ -1,5 +1,5 @@
 # Use an official Elixir runtime as a parent image.
-FROM --platform=linux/amd64 elixir:1.13.3-alpine
+FROM elixir:1.13.3-alpine
 ENV MIX_ENV=prod
 
 RUN apk update && \
