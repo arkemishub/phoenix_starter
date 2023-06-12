@@ -10,6 +10,9 @@ RUN mkdir /app
 COPY . /app
 WORKDIR /app
 
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 # Install Hex package manager.
 RUN mix local.hex --force
 RUN mix local.rebar --force
