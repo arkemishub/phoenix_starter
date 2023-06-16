@@ -8,23 +8,24 @@
 import Config
 
 config :arke_postgres, ArkePostgres.Repo,
-       database: System.get_env("DB_NAME"),
-       hostname: System.get_env("DB_HOSTNAME"),
-       username: System.get_env("DB_USER"),
-       password: System.get_env("DB_PASSWORD")
+  database: System.get_env("DB_NAME"),
+  hostname: System.get_env("DB_HOSTNAME"),
+  username: System.get_env("DB_USER"),
+  password: System.get_env("DB_PASSWORD"),
+  log: false
 
 config :arke,
-       persistence: %{
-         arke_postgres: %{
-           init: &ArkePostgres.init/0,
-           create: &ArkePostgres.create/2,
-           update: &ArkePostgres.update/2,
-           delete: &ArkePostgres.delete/2,
-           execute_query: &ArkePostgres.Query.execute/2,
-           create_project: &ArkePostgres.create_project/1,
-           delete_project: &ArkePostgres.delete_project/1
-         }
-       }
+  persistence: %{
+    arke_postgres: %{
+      init: &ArkePostgres.init/0,
+      create: &ArkePostgres.create/2,
+      update: &ArkePostgres.update/2,
+      delete: &ArkePostgres.delete/2,
+      execute_query: &ArkePostgres.Query.execute/2,
+      create_project: &ArkePostgres.create_project/1,
+      delete_project: &ArkePostgres.delete_project/1
+    }
+  }
 
 # Configures the endpoint
 config :phoenix_starter, PhoenixStarterWeb.Endpoint,
@@ -48,10 +49,10 @@ config :arke_server, ArkeServer.Endpoint, server: false
 
 # Guardian configuration
 config :arke_auth, ArkeAuth.Guardian,
-issuer: "arke_auth",
-secret_key: System.get_env("SECRET_KEY_BASE"),
-verify_issuer: true,
-token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
+  issuer: "arke_auth",
+  secret_key: System.get_env("SECRET_KEY_BASE"),
+  verify_issuer: true,
+  token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
