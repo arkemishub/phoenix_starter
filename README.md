@@ -60,7 +60,7 @@ iex -S mix phx.server
 - If it is necessary clean old deps (`for local developement`):
 
 ```bash
-mix deps.clean --all
+mix deps.update --all
 ```
 
 - Enjoy your app on [`localhost:4000`](http://localhost:4000)
@@ -73,25 +73,20 @@ If you are glad to support us and contribute to the developement of Arke:
 
  <br/>
 
-- clone the repo [arke-monorepo-elixir](https://github.com/arkemishub/arke-monorepo-elixir)
-
-```bash
-git clone git@github.com:arkemishub/arke-monorepo-elixir.git
-```
-
-- Pull the submodules
-
-```bash
-git pull --recurse-submodules
-git submodule update --init
-```
+- clone the repo you want:
+  - [arke](https://github.com/arkemishub/arke)
+  - [arke_postgres](https://github.com/arkemishub/arke-postgres)
+  - [arke_auth](https://github.com/arkemishub/arke-auth)
+  - [arke_server](https://github.com/arkemishub/arke-server)
 
 <br/>
 
-- Add to your `.env` file the path of the cloned repo:
+- Add to your `.env` file the path of the cloned package:
 
 ```bash
-export ARKE_MONOREPO_ELIXIR_PATH= 'PATH_TO_ARKE_MONOREPO'
+export ${REPO_NAME}_ELIXIR_PATH="PATH_TO_CLONED_REPO"
+
+example ARKE_POSTGRES_ELIXIR_PATH="/path/to/arke_postgres/folder"
 ```
 
 <br/>

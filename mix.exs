@@ -41,37 +41,35 @@ defmodule PhoenixStarter.MixProject do
     ])
   end
 
-  defp arke_deps(:dev) do
-    # Get arke's dependecies based on the env path. Also print a message only if the current command is mix deps.get
-    mono_path = System.get_env("ARKE_MONOREPO_ELIXIR_PATH", nil)
-    current_cmd = List.first(System.argv())
-
-    with true <- mono_path != nil and mono_path != "" do
-      if String.contains?(current_cmd, "deps.get") do
-        IO.puts(
-          "#{IO.ANSI.cyan()}ARKE_MONOREPO_ELIXIR_PATH found. Using local dependencies#{IO.ANSI.reset()}"
-        )
-      end
-
-      [
-        {:arke, path: "#{mono_path}/arke", override: true},
-        {:arke_postgres, path: "#{mono_path}/arke_postgres", override: true},
-        {:arke_auth, path: "#{mono_path}/arke_auth", override: true},
-        {:arke_server, path: "#{mono_path}/arke_server", override: true}
-      ]
-    else
-      _ ->
-        if String.contains?(current_cmd, "deps.get") do
-          IO.puts(
-            "#{IO.ANSI.cyan()}ARKE_MONOREPO_ELIXIR_PATH not found. Using published dependencies#{IO.ANSI.reset()}"
-          )
-        end
-
-        arke_deps(nil)
-    end
-  end
+  defp arke_deps(:prod), do: arke_package()
 
   defp arke_deps(_) do
+    # Get arke's dependecies based on the env path. Also print a message only if the current command is mix deps.get
+    env_var = System.get_env()
+
+    arke_env =
+      Enum.filter(env_var, fn {k, _v} -> String.contains?(String.downcase(k), "ex_dep_arke") end)
+
+    local_deps =
+      Enum.reduce(arke_env, [], fn {package_name, local_path}, acc ->
+        if local_path !== "" do
+          parsed_name = String.replace(package_name, "EX_DEP_", "") |>  String.replace( "_PATH", "")|> String.downcase()
+          IO.puts("#{IO.ANSI.cyan()} Using local #{parsed_name}#{IO.ANSI.reset()}")
+          [{String.to_atom(parsed_name), path: local_path, override: true} | acc]
+        else
+          acc
+        end
+      end)
+
+    deps = arke_package()
+
+    filtered_deps =
+      Enum.filter(deps, fn {k, _v} -> not Enum.member?(Keyword.keys(local_deps), k) end)
+
+    filtered_deps ++ local_deps
+  end
+
+  defp arke_package() do
     [
       {:arke, "~> 0.1.8"},
       {:arke_postgres, "~> 0.2.3"},
