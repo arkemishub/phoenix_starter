@@ -34,6 +34,13 @@ config :phoenix_starter, PhoenixStarterWeb.Endpoint,
   pubsub_server: PhoenixStarter.PubSub,
   live_view: [signing_salt: "ODJKm1AE"]
 
+# # MAILER CONFIGURATION
+config :phoenix_starter, PhoenixStarter.Mailer,
+  adapter: Bamboo.MailgunAdapter,
+  api_key: "1861be5d785a2441ee620e2e7756e70b-c30053db-1a4dc0b1",
+  domain: "sandboxfc5cfd3326f2463186d866056b0e79c7.mailgun.org",
+  default_sender: "test@test.it"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
