@@ -71,10 +71,10 @@ defmodule PhoenixStarter.MixProject do
 
   defp arke_package() do
     [
-      {:arke, "~> 0.1.8"},
-      {:arke_postgres, "~> 0.2.3"},
-      {:arke_auth, "~> 0.1.4"},
-      {:arke_server, "~> 0.1.9"}
+      {:arke, "~> 0.1.24"},
+      {:arke_postgres, "~> 0.2.10"},
+      {:arke_auth, "~> 0.1.13"},
+      {:arke_server, "~> 0.1.26"}
     ]
   end
 
