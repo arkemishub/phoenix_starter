@@ -51,21 +51,22 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :arke,
-       persistence: %{
-         arke_postgres: %{
-           init: &ArkePostgres.init/0,
-           create: &ArkePostgres.create/2,
-           update: &ArkePostgres.update/2,
-           delete: &ArkePostgres.delete/2,
-           execute_query: &ArkePostgres.Query.execute/2,
-           create_project: &ArkePostgres.create_project/1,
-           delete_project: &ArkePostgres.delete_project/1
-         }
-       }
+  persistence: %{
+    arke_postgres: %{
+      init: &ArkePostgres.init/0,
+      create: &ArkePostgres.create/2,
+      update: &ArkePostgres.update/2,
+      delete: &ArkePostgres.delete/2,
+      execute_query: &ArkePostgres.Query.execute/2,
+      create_project: &ArkePostgres.create_project/1,
+      delete_project: &ArkePostgres.delete_project/1,
+      repo: ArkePostgres.Repo
+    }
+  }
 
 # Guardian configuration
 config :arke_auth, ArkeAuth.Guardian,
-       issuer: "arke_auth",
-       secret_key: "qby4HTsDDHvf4fzGqlzBWHsUAZ8Pad6b0nI1+/mh7GXdM6XEiYYPRrtuQ3o/ISoF",
-       verify_issuer: true,
-       token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
+  issuer: "arke_auth",
+  secret_key: "qby4HTsDDHvf4fzGqlzBWHsUAZ8Pad6b0nI1+/mh7GXdM6XEiYYPRrtuQ3o/ISoF",
+  verify_issuer: true,
+  token_ttl: %{"access" => {1, :minute}, "refresh" => {30, :days}}

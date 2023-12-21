@@ -1,9 +1,9 @@
 defmodule PhoenixStarter.Email do
-  alias Hex.API.Key
-  import Bamboo.Email
+  import Swoosh.Email
 
   # dynamic
   @mailer_conf Application.get_env(:phoenix_starter, PhoenixStarter.Mailer)
+  @provider_options [:template_name, :custom_vars, :tags, :recipient_vars, :sending_options]
 
   def send_email(opts) when is_list(opts) do
     case Keyword.keyword?(opts) do
@@ -24,7 +24,7 @@ defmodule PhoenixStarter.Email do
     subject = Map.get(opts, :subject, "")
     text = Map.get(opts, :text, "")
 
-    new_email()
+    new()
     |> from(sender)
     |> to(receiver)
     |> subject(@subject)
@@ -47,18 +47,15 @@ defmodule PhoenixStarter.Email do
     end
   end
 
-  defp parse_option(email, [{:template, v} | t]) when not is_nil(v) do
-    parse_option(Bamboo.MailgunHelper.template(email, v), t)
-  end
-
-  defp parse_option(email, [{:variables, v} | t]) when not is_nil(v) do
-    parse_option(Bamboo.MailgunHelper.recipient_variables(email, v), t)
+  defp parse_option(email, [{k, v} | t])
+       when k in [:template_name, :custom_vars, :tags] and not is_nil(v) do
+    parse_option(put_provider_option(email, k, v), t)
   end
 
   # See https://hexdocs.pm/bamboo/Bamboo.Attachment.html to get an idea of what the value of the attachment could be
   defp parse_option(email, [{:attachments, v} | t]) when not is_nil(v) do
-    attachment = Bamboo.Attachment.new(v)
-    parse_option(put_attachment(email, attachment), t)
+    attachment = Swoosh.Attachment.new(v)
+    parse_option(attachment(email, attachment), t)
   end
 
   defp parse_option(email, [h | t]), do: parse_option(email, t)

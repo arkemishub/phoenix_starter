@@ -7,6 +7,26 @@
 # General application configuration
 import Config
 
+# config :arke_server, Ueberauth,
+#   providers: [
+#     google:
+#       {Ueberauth.Strategy.Google,
+#        [
+#          default_scope: "email profile",
+#          prompt: "select_account"
+#        ]},
+#     github: {Ueberauth.Strategy.Github, [default_scope: "read:user user:email"]},
+#     facebook: {Ueberauth.Strategy.Facebook, [default_scope: "public_profile"]},
+#     apple: {Ueberauth.Strategy.Apple, []}
+#   ]
+
+# config :arke_server, ArkeServer.Plugs.OAuth,
+#   providers: [
+#     facebook: {ArkeServer.OAuth.Provider.Facebook, []},
+#     google: {ArkeServer.OAuth.Provider.Google, []},
+#     apple: {ArkeServer.OAuth.Provider.Apple, []}
+#   ]
+
 config :arke_postgres, ArkePostgres.Repo,
   database: System.get_env("DB_NAME"),
   hostname: System.get_env("DB_HOSTNAME"),
@@ -35,8 +55,8 @@ config :phoenix_starter, PhoenixStarterWeb.Endpoint,
   live_view: [signing_salt: "ODJKm1AE"]
 
 # # MAILER CONFIGURATION
-config :phoenix_starter, PhoenixStarter.Mailer,
-  adapter: Bamboo.MailgunAdapter,
+config :arke_server, ArkeServer.Mailer,
+  adapter: Swoosh.Adapters.Mailgun,
   api_key: "1861be5d785a2441ee620e2e7756e70b-c30053db-1a4dc0b1",
   domain: "sandboxfc5cfd3326f2463186d866056b0e79c7.mailgun.org",
   default_sender: "test@test.it"
