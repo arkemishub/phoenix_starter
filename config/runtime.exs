@@ -7,6 +7,41 @@ import Config
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
 
+# ---- oauth ----
+#config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+#  client_id:
+#    System.get_env(
+#      "GOOGLE_CLIENT_ID",
+#      "574564377212-u90flrdprll6la0qg7ctl7s19jitur8k.apps.googleusercontent.com"
+#    ),
+#  client_secret: System.get_env("GOOGLE_CLIENT_SECRET", "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"),
+#  redirect_uri:
+#    System.get_env("GOOGLE_REDIRECT_URI", "http://localhost:4000/lib/auth/signin/google/callback")
+#
+#config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+#  client_id: System.get_env("GITHUB_CLIENT_ID", "7b3d14a789d2715a06a3"),
+#  client_secret:
+#    System.get_env("GITHUB_CLIENT_SECRET", "ae67c621bf91843a4b382276f3bb2974ac4bb54a"),
+#  redirect_uri:
+#    System.get_env("GITHUB_REDIRECT_URI", "http://localhost:4000/lib/auth/signin/github/callback")
+#
+#config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
+#  client_id: System.get_env("FACEBOOK_CLIENT_ID", "1437210146848437"),
+#  client_secret: System.get_env("FACEBOOK_CLIENT_SECRET", "715ceab4e8ef1da507206ee471240daa"),
+#  redirect_uri:
+#    System.get_env(
+#      "FACEBOOK_REDIRECT_URI",
+#      "http://localhost:4000/lib/auth/signin/facebook/callback"
+#    )
+#
+#config :ueberauth, Ueberauth.Strategy.Apple.OAuth,
+#  client_id: "com.khooa.app.applesignintest",
+#  client_secret: {ArkeServer.Utils.Apple, :client_secret},
+#  redirect_uri:
+#    "https://1523-2a0e-410-2279-0-cf8-4cd6-816c-6621.ngrok-free.app/lib/auth/signin/apple/callback"
+
+# ---- end oauth ----
+
 # Start the phoenix server if environment is set and running in a release
 if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
   config :phoenix_starter, PhoenixStarterWeb.Endpoint, server: true

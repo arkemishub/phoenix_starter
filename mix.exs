@@ -37,6 +37,13 @@ defmodule PhoenixStarter.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      {:bamboo, "~> 2.3.0"},
+      {:hackney, "~> 1.18"},
+      {:swoosh, "~> 1.11"},
+      {:phoenix_html, "~> 2.11"},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
+    {:xlsxir, "~> 1.6.4"},
+      {:csv, "~> 3.2"},
       arke_deps(Mix.env())
     ])
   end
@@ -53,7 +60,11 @@ defmodule PhoenixStarter.MixProject do
     local_deps =
       Enum.reduce(arke_env, [], fn {package_name, local_path}, acc ->
         if local_path !== "" do
-          parsed_name = String.replace(package_name, "EX_DEP_", "") |>  String.replace( "_PATH", "")|> String.downcase()
+          parsed_name =
+            String.replace(package_name, "EX_DEP_", "")
+            |> String.replace("_PATH", "")
+            |> String.downcase()
+
           IO.puts("#{IO.ANSI.cyan()} Using local #{parsed_name}#{IO.ANSI.reset()}")
           [{String.to_atom(parsed_name), path: local_path, override: true} | acc]
         else
@@ -71,10 +82,10 @@ defmodule PhoenixStarter.MixProject do
 
   defp arke_package() do
     [
-      {:arke, "~> 0.1.8"},
-      {:arke_postgres, "~> 0.2.3"},
-      {:arke_auth, "~> 0.1.4"},
-      {:arke_server, "~> 0.1.9"}
+      {:arke, "~> 0.1.24"},
+      {:arke_postgres, "~> 0.2.10"},
+      {:arke_auth, "~> 0.1.13"},
+      {:arke_server, "~> 0.1.26"}
     ]
   end
 
@@ -86,7 +97,9 @@ defmodule PhoenixStarter.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get"]
+      setup: ["deps.get"],
+    "arke.init": ["ecto.create -r ArkePostgres.Repo", "arke_postgres.init_db"],
+    "arke.migrate": ["ecto.migrate -r ArkePostgres.Repo"]
     ]
   end
 end
