@@ -4,13 +4,26 @@ defmodule PhoenixStarter.MixProject do
   def project do
     [
       app: :phoenix_starter,
-      version: "0.1.3",
+      version: "0.1.4",
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      versioning: versioning()
+    ]
+  end
+
+  # Configuration for mix version
+  #
+  # Type `mix version --help` for more information.
+  defp versioning do
+    [
+      tag_prefix: "v",
+      commit_msg: "chore: set version to v%s",
+      annotation: "tag release-%s created with mix_version",
+      annotate: true
     ]
   end
 
@@ -71,10 +84,10 @@ defmodule PhoenixStarter.MixProject do
 
   defp arke_package() do
     [
-      {:arke, "~> 0.1.24"},
-      {:arke_postgres, "~> 0.2.10"},
-      {:arke_auth, "~> 0.1.13"},
-      {:arke_server, "~> 0.1.26"}
+      {:arke, "~> 0.1.27"},
+      {:arke_postgres, "~> 0.2.11"},
+      {:arke_auth, "~> 0.1.14"},
+      {:arke_server, "~> 0.1.32" },
     ]
   end
 
