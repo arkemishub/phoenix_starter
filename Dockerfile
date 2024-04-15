@@ -13,7 +13,7 @@
 #   - Ex: hexpm/elixir:1.14.0-erlang-25.1-debian-bullseye-20210902-slim
 #
 ARG ELIXIR_VERSION=1.14.0
-ARG OTP_VERSION=25.1
+ARG OTP_VERSION=25.1.1
 ARG DEBIAN_VERSION=bullseye-20220801-slim
 
 

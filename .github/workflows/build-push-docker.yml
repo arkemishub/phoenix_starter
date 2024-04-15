@@ -1,32 +1,47 @@
-name: Build phoenix_starter starter PROD
+name: Build audit_involvement_ras_pwc_backend starter PROD
 
 on:
   workflow_dispatch:
-  release:
-    types: [ published ]
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   build:
     name: Build and test
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: write
     concurrency:
       group: ci-${{ github.ref }}
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Build & push Docker image 🐳
-        uses: mr-smithers-excellent/docker-build-push@v5
+      - name: Extract metadata for the Docker image
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          image: phoenix_starter
-          tags: ${{ github.event.release.tag_name }}
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          buildArgs: MIX_ENV=prod
-        env:
-          MIX_ENV: prod
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            MIX_ENV=dev
