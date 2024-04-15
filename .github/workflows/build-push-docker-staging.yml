@@ -1,9 +1,9 @@
-name: Build phoenix_starter starter PROD
+name: Build phoenix_starter starter STAGING
 
 on:
   workflow_dispatch:
-  release:
-    types: [ published ]
+  push:
+    branches: ["staging"]
 
 jobs:
   build:
@@ -23,10 +23,10 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
           image: phoenix_starter
-          tags: ${{ github.event.release.tag_name }}
+          tags: staging
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          buildArgs: MIX_ENV=prod
+          buildArgs: MIX_ENV=${{ secrets.MIX_ENV_STAGING }}
         env:
-          MIX_ENV: prod
+          MIX_ENV: ${{ secrets.MIX_ENV_STAGING }}

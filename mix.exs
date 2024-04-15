@@ -4,26 +4,12 @@ defmodule PhoenixStarter.MixProject do
   def project do
     [
       app: :phoenix_starter,
-      version: "0.1.6",
+      version: "0.1.0",
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps(),
-      versioning: versioning()
-    ]
-  end
-
-  # Configuration for mix version
-  #
-  # Type `mix version --help` for more information.
-  defp versioning do
-    [
-      tag_prefix: "v",
-      commit_msg: "chore: set version to v%s",
-      annotation: "tag release-%s created with mix_version",
-      annotate: true
+      deps: deps()
     ]
   end
 
@@ -41,6 +27,8 @@ defmodule PhoenixStarter.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
+  # Specifies your project dependencies.
+  #
   # Type `mix help deps` for examples and options.
   defp deps do
     List.flatten([
@@ -50,12 +38,13 @@ defmodule PhoenixStarter.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      {:hackney, "~> 1.18"},
+      {:swoosh, "~> 1.11"},
       arke_deps(Mix.env())
     ])
   end
 
   defp arke_deps(:prod), do: arke_package()
-
   defp arke_deps(_) do
     # Get arke's dependecies based on the env path. Also print a message only if the current command is mix deps.get
     env_var = System.get_env()
@@ -84,12 +73,13 @@ defmodule PhoenixStarter.MixProject do
 
   defp arke_package() do
     [
-      {:arke, "~> 0.1.31"},
-      {:arke_postgres, "~> 0.2.11"},
-      {:arke_auth, "~> 0.1.14"},
-      {:arke_server, "~> 0.1.35" },
+      {:arke, github: "arkemishub/arke", branch: "feat/registry-file", override: true},
+      {:arke_postgres, github: "arkemishub/arke-postgres", branch: "feat/registry-file", override: true},
+      {:arke_auth, github: "arkemishub/arke-auth", branch: "feat/registry-file", override: true},
+      {:arke_server, github: "arkemishub/arke-server", branch: "feat/registry-file", override: true},
     ]
   end
+
 
   # Aliases are shortcuts or tasks specific to the current project.
   # For example, to install project dependencies and perform other setup tasks, run:
@@ -99,7 +89,9 @@ defmodule PhoenixStarter.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get"]
+      setup: ["deps.get"],
+      "arke.migrate": ["ecto.migrate -r ArkePostgres.Repo --prefix arke_system"],
+      "arke.init": ["ecto.create -r ArkePostgres.Repo","arke_postgres.create_project --id arke_system --label Arke System Project","ecto.migrate -r ArkePostgres.Repo --prefix arke_system", "arke.seed_project --project arke_system"]
     ]
   end
 end

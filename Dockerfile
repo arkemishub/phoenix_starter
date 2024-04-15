@@ -1,24 +1,3 @@
-# Use an official Elixir runtime as a parent image.
-FROM elixir:1.13.3-alpine
-ENV MIX_ENV=prod
-
-RUN apk update && \
-    apk add postgresql-client build-base
-
-# Create app directory and copy the Elixir projects into it.
-RUN mkdir /app
-COPY . /app
-WORKDIR /app
-
-# Install Hex package manager.
-RUN mix local.hex --force
-RUN mix local.rebar --force
-
-# Compile the project.
-RUN mix deps.get && mix deps.compile && mix do compile
-
-CMD ["/app/entrypoint.sh"]
-
 # Find eligible builder and runner images on Docker Hub. We use Ubuntu/Debian instead of
 # Alpine to avoid DNS resolution issues in production.
 #
@@ -33,85 +12,81 @@ CMD ["/app/entrypoint.sh"]
 #   - https://pkgs.org/ - resource for finding needed packages
 #   - Ex: hexpm/elixir:1.14.0-erlang-25.1-debian-bullseye-20210902-slim
 #
-# ARG ELIXIR_VERSION=1.14.0
-# ARG OTP_VERSION=25.1
-# ARG DEBIAN_VERSION=bullseye-20220801-slim
-
-# ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
-# ARG RUNNER_IMAGE="debian:${DEBIAN_VERSION}"
-
-# FROM ${BUILDER_IMAGE} as builder
-
-# ARG MIX_ENV
-# # install build dependencies
-# RUN apt-get update -y && apt-get install -y build-essential git postgresql-client \
-#     && apt-get clean && rm -f /var/lib/apt/lists/*_*
+ARG ELIXIR_VERSION=1.14.0
+ARG OTP_VERSION=25.1
+ARG DEBIAN_VERSION=bullseye-20220801-slim
 
 
-# # prepare build dir
-# WORKDIR /app
+ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
+ARG RUNNER_IMAGE="debian:${DEBIAN_VERSION}"
 
-# # install hex + rebar
-# RUN mix local.hex --force && \
-#     mix local.rebar --force
+FROM ${BUILDER_IMAGE} as builder
 
-# # set build ENV
-# ENV MIX_ENV=${MIX_ENV}
+# install build dependencies
+RUN apt-get update -y && apt-get install -y build-essential git \
+    && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
-# # install mix dependencies
-# COPY mix.exs mix.lock ./
-# RUN mix deps.get --only ${MIX_ENV}
-# RUN mkdir config
+# prepare build dir
+WORKDIR /app
 
-# # copy compile-time config files before we compile dependencies
-# # to ensure any relevant config change will trigger the dependencies
-# # to be re-compiled.
-# COPY config/config.exs config/${MIX_ENV}.exs config/
-# RUN mix deps.compile
+# install hex + rebar
+RUN mix local.hex --force && \
+    mix local.rebar --force
 
-# COPY priv priv
+ARG MIX_ENV
+# set build ENV
+ENV MIX_ENV=$MIX_ENV
 
-# COPY lib lib
+# install mix dependencies
+COPY mix.exs mix.lock ./
+RUN mix deps.get
+RUN mkdir config
 
-# # Compile the release
-# RUN mix compile
+# copy compile-time config files before we compile dependencies
+# to ensure any relevant config change will trigger the dependencies
+# to be re-compiled.
+COPY config/config.exs config/${MIX_ENV}.exs config/
+RUN mix deps.compile
 
-# # Changes to config/runtime.exs don't require recompiling the code
-# COPY config/runtime.exs config/
+COPY lib lib
 
-# # COPY rel rel
-# RUN mix release
+# Compile the release
+RUN mix compile
 
-# # start a new build stage so that the final image will only contain
-# # the compiled release and other runtime necessities
-# FROM ${RUNNER_IMAGE}
+# Changes to config/runtime.exs don't require recompiling the code
+COPY config/runtime.exs config/
 
+COPY rel rel
+RUN mix release
 
-# RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
-#     && apt-get clean && rm -f /var/lib/apt/lists/*_*
+# start a new build stage so that the final image will only contain
+# the compiled release and other runtime necessities
+FROM ${RUNNER_IMAGE}
 
-# # Set the locale
-# RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
+RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
+    && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
-# ENV LANG en_US.UTF-8
-# ENV LANGUAGE en_US:en
-# ENV LC_ALL en_US.UTF-8
+# Set the locale
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
 
-# WORKDIR "/app"
-# RUN chown nobody /app
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
-# ARG MIX_ENV
-# # set runner ENV
-# ENV MIX_ENV=${MIX_ENV}
+WORKDIR "/app"
+RUN chown nobody /app
 
-# # Only copy the final release from the build stage
-# COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/phoenix_starter ./
+ARG MIX_ENV
+# set runner ENV
+ENV MIX_ENV=$MIX_ENV
 
-# USER nobody
+# Only copy the final release from the build stage
+COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/phoenix_starter ./
 
-# COPY --chown=nobody:root ./entrypoint.sh ./
-# RUN chmod +x ./entrypoint.sh
+USER nobody
 
-# EXPOSE 4000
+ENV MIX_ENV=$MIX_ENV
 
-# CMD ["/app/entrypoint.sh"]
+EXPOSE 4000
+
+CMD ["/app/bin/server"]

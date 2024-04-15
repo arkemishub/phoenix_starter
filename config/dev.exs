@@ -1,19 +1,19 @@
-import Config
-
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
 # The watchers configuration can be used to run external
-# watchers to your application. For example, we use it
-# with esbuild to bundle .js and .css sources.
+# watchers to your application. For example, we can use it
+# to bundle .js and .css sources.
+import Config
+
 config :phoenix_starter, PhoenixStarterWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "pJsr+GA5YCBRF6F4h+CwPET/HDtMm8x7PZ0qQ1uEqjInnCSScFyHF12rroZb6kih",
+  secret_key_base: "habpivcnlpohsazd4DSmn26jvAftxmZjQjn+xJ9ER/jzvTySWXP2lMRpZZ53hZBV",
   watchers: []
 
 # ## SSL Support
@@ -24,7 +24,6 @@ config :phoenix_starter, PhoenixStarterWeb.Endpoint,
 #
 #     mix phx.gen.cert
 #
-# Note that this task requires Erlang/OTP 20 or later.
 # Run `mix help phx.gen.cert` for more information.
 #
 # The `http:` config above can be replaced with:
@@ -42,30 +41,21 @@ config :phoenix_starter, PhoenixStarterWeb.Endpoint,
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
-
-# Set a higher stacktrace during development. Avoid configuring such
-# in production as building large stacktraces may be expensive.
+config :phoenix_starter, dev_routes: true
 config :phoenix, :stacktrace_depth, 20
-
-# Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
-
-config :arke,
-       persistence: %{
-         arke_postgres: %{
-           init: &ArkePostgres.init/0,
-           create: &ArkePostgres.create/2,
-           update: &ArkePostgres.update/2,
-           delete: &ArkePostgres.delete/2,
-           execute_query: &ArkePostgres.Query.execute/2,
-           create_project: &ArkePostgres.create_project/1,
-           delete_project: &ArkePostgres.delete_project/1
-         }
-       }
 
 # Guardian configuration
 config :arke_auth, ArkeAuth.Guardian,
        issuer: "arke_auth",
-       secret_key: "qby4HTsDDHvf4fzGqlzBWHsUAZ8Pad6b0nI1+/mh7GXdM6XEiYYPRrtuQ3o/ISoF",
        verify_issuer: true,
-       token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
+       token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}},
+       secret_key: "habpivcnlpohsazd4DSmn26jvAftxmZjQjn+xJ9ER/jzvTySWXP2lMRpZZ53hZBV"
+
+
+# Leave to use  mix commands
+config :arke_postgres, ArkePostgres.Repo,
+  database: System.get_env("DB_NAME"),
+  hostname: System.get_env("DB_HOSTNAME"),
+  username: System.get_env("DB_USER"),
+  password: System.get_env("DB_PASSWORD")
