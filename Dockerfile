@@ -88,5 +88,6 @@ USER nobody
 ENV MIX_ENV=$MIX_ENV
 
 EXPOSE 4000
+RUN chmod +x /app/bin/server
 
 CMD ["/app/bin/server"]

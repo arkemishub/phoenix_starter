@@ -1,4 +1,4 @@
-name: Build audit_involvement_ras_pwc_backend starter PROD
+name: Build phoenix_starter  PROD
 
 on:
   workflow_dispatch:
