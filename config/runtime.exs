@@ -53,6 +53,14 @@ config :arke_postgres, ArkePostgres.Repo,
   username: System.get_env("DB_USER"),
   password: System.get_env("DB_PASSWORD")
 
+
+# Guardian configuration
+config :arke_auth, ArkeAuth.Guardian,
+       issuer: "arke_auth",
+       secret_key: System.get_env("SECRET_KEY_BASE"),
+       verify_issuer: true,
+       token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
+
 # ## Using releases
 #
 # If you are doing OTP releases, you need to instruct Phoenix

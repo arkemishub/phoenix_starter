@@ -28,6 +28,11 @@ config :arke,
   }
 config :arke_postgres, ecto_repos: [ArkePostgres.Repo]
 
+config :arke_postgres, ArkePostgres.Repo,
+       database: System.get_env("DB_NAME"),
+       hostname: System.get_env("DB_HOSTNAME"),
+       username: System.get_env("DB_USER"),
+       password: System.get_env("DB_PASSWORD")
 
 # Add Config for ArkeServer endpoints
 config :arke_server, ArkeServer.Endpoint, server: false
@@ -37,12 +42,11 @@ config :arke_server,:mailer_module, PhoenixStarter.Mailer
 # The endpoint module define which servers show in the swagger. You can pass a single one or a list
 config :arke_server, endpoint_module: PhoenixStarterWeb.Endpoint
 
-# Guardian configuration
-config :arke_auth, ArkeAuth.Guardian,
-  issuer: "arke_auth",
-  secret_key: System.get_env("SECRET_KEY_BASE"),
-  verify_issuer: true,
-  token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
+config :logger,
+       backends: [:console],
+       compile_time_purge_matching: [
+         [module: Cluster.Logger, level_lower_than: :error]
+       ]
 
 ########################################################################
 ### SSO ARKE  ##########################################################

@@ -1,28 +1,3 @@
 {
-  "arke": [
-    {
-      "id": "super_admin",
-      "label": "Super admin",
-      "parameters": [
-        {
-          "id": "first_name",
-          "metadata": {
-            "required": false
-          }
-        },
-        {
-          "id": "last_name",
-          "metadata": {
-            "required": false
-          }
-        },
-        {
-          "id": "arke_system_user",
-          "metadata": {
-            "required": false
-          }
-        }
-      ]
-    }
-  ]
+  "arke": []
 }
