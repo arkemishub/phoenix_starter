@@ -73,10 +73,10 @@ defmodule PhoenixStarter.MixProject do
 
   defp arke_package() do
     [
-      {:arke, github: "arkemishub/arke", branch: "feat/registry-file", override: true},
-      {:arke_postgres, github: "arkemishub/arke-postgres", branch: "feat/registry-file", override: true},
-      {:arke_auth, github: "arkemishub/arke-auth", branch: "feat/registry-file", override: true},
-      {:arke_server, github: "arkemishub/arke-server", branch: "feat/registry-file", override: true},
+      {:arke, "~> 0.3.0"},
+      {:arke_postgres, "~> 0.3.0"},
+      {:arke_auth, "~> 0.3.0"},
+      {:arke_server, "~> 0.3.0"},
     ]
   end
 
