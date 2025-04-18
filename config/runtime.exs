@@ -53,14 +53,6 @@ config :arke_postgres, ArkePostgres.Repo,
   username: System.get_env("DB_USER"),
   password: System.get_env("DB_PASSWORD")
 
-
-# Guardian configuration
-config :arke_auth, ArkeAuth.Guardian,
-       issuer: "arke_auth",
-       secret_key: System.get_env("SECRET_KEY_BASE"),
-       verify_issuer: true,
-       token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
-
 # ## Using releases
 #
 # If you are doing OTP releases, you need to instruct Phoenix
@@ -80,8 +72,8 @@ config :arke_auth, ArkeAuth.Guardian,
 # are not using SMTP. Here is an example of the configuration:
 #
 #     config :phoenix_starter, PhoenixStarter.Mailer,
-#       
-#       adapter: Swoosh.Adapters.Local 
+#
+#       adapter: Swoosh.Adapters.Local
 #
 #
 # For this example you need include a HTTP client required by Swoosh API client.
@@ -95,5 +87,9 @@ config :arke_auth, ArkeAuth.Guardian,
 config :phoenix_starter, PhoenixStarter.Mailer,
   adapter: Swoosh.Adapters.Local
 
-
-
+# Guardian configuration
+config :arke_auth, ArkeAuth.Guardian,
+  issuer: "arke_auth",
+  secret_key: System.get_env("SECRET_KEY_BASE"),
+  verify_issuer: true,
+  token_ttl: %{"access" => {7, :days}, "refresh" => {30, :days}}
