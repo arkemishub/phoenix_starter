@@ -28,12 +28,6 @@ config :arke,
   }
 config :arke_postgres, ecto_repos: [ArkePostgres.Repo]
 
-config :arke_postgres, ArkePostgres.Repo,
-       database: System.get_env("DB_NAME"),
-       hostname: System.get_env("DB_HOSTNAME"),
-       username: System.get_env("DB_USER"),
-       password: System.get_env("DB_PASSWORD")
-
 # Add Config for ArkeServer endpoints
 config :arke_server, ArkeServer.Endpoint, server: false
 
